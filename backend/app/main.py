@@ -474,8 +474,11 @@ def demo_reset():
 # ---- live events
 @app.get("/api/events")
 async def events():
+    # no-transform: intermediaries must not re-encode/compress (and thereby buffer) the stream;
+    # X-Accel-Buffering: nginx-style proxies must not buffer it. (Cloudflare in front of Render strips the latter and
+    # does not buffer event-streams anyway -- measured, see DESIGN.md.)
     return StreamingResponse(hub.stream(), media_type="text/event-stream",
-                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+                             headers={"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no"})
 
 
 # ------------------------------------------------------------------ static frontend (single-service deploy)

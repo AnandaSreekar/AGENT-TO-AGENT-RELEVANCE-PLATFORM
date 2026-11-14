@@ -36,13 +36,17 @@ class Hub:
                 pass  # slow consumer: drop rather than block publishers
 
     async def stream(self):
+        """SSE generator. Every yield is one small chunk; the server never batches events itself.
+        A comment line is sent every SSE_HEARTBEAT_SECONDS (default 5 s) so idle connections stay open through
+        proxies and a dead client is noticed quickly."""
         q: asyncio.Queue = asyncio.Queue(maxsize=200)
         self.queues.add(q)
         try:
             yield "retry: 3000\n\n"
+            yield ": stream open\n\n"
             while True:
                 try:
-                    evt = await asyncio.wait_for(q.get(), timeout=15)
+                    evt = await asyncio.wait_for(q.get(), timeout=settings.sse_heartbeat)
                     yield f"event: {evt['type']}\ndata: {json.dumps(evt)}\n\n"
                 except asyncio.TimeoutError:
                     yield ": keep-alive\n\n"

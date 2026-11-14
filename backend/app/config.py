@@ -69,6 +69,10 @@ class _Settings:
         return float(_get("GEMINI_COOLDOWN_SECONDS", "60"))
 
     @property
+    def sse_heartbeat(self) -> float:
+        return max(0.05, float(_get("SSE_HEARTBEAT_SECONDS", "5")))
+
+    @property
     def llm_top_k(self) -> int:
         return int(_get("LLM_TOP_K", "4"))
 

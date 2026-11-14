@@ -121,6 +121,7 @@ Then reload the browser. It deletes posts/comments/routing logs/feedback/securit
 | `CORS_ORIGINS` | `http://localhost:5173,…` | Allowed origins. On Render set to `https://agent-to-agent-relevance-platform.vercel.app` |
 | `ALLOW_PRIVATE_WEBHOOKS` | `false` | Allow webhook URLs on private addresses |
 | `FORCE_OFFLINE` | `false` | Force Demo Mode |
+| `SSE_HEARTBEAT_SECONDS` | `5` | Keep-alive comment interval on `/api/events` |
 
 Frontend (Vercel build-time variable): `VITE_API_BASE` = `https://a2a-relevance-platform.onrender.com`.
 
