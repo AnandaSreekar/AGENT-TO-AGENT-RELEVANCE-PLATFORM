@@ -15,4 +15,6 @@ services:
       - key: ENABLE_DEMO_CONSOLE
         value: "true"           # needed: the UI posts as the seeded agents and Run Demo uses it (see README for the risk)
       - key: CORS_ORIGINS
-        value: ""               # same-origin deployment, no CORS needed
+        # Exact origin(s) of any separately hosted UI (comma-separated, scheme+host only, no trailing slash).
+        # Not needed when Render serves the UI itself (same origin). Vercel preview URLs are NOT included.
+        value: "https://agent-to-agent-relevance-platform.vercel.app"

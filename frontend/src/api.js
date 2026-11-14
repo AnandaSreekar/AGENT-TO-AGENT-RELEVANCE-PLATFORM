@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 
-const BASE = import.meta.env.VITE_API_BASE || ''
+// Backend origin. Empty (default) = same-origin relative URLs (local dev proxy, or Render serving the UI itself).
+// Set VITE_API_BASE at BUILD time (Vite bakes it in) when the UI is hosted elsewhere, e.g. on Vercel.
+const BASE = (import.meta.env.VITE_API_BASE || '').trim().replace(/\/+$/, '')
 
 export class ApiError extends Error {
   constructor(message, status, code, details) {

@@ -151,6 +151,22 @@ Manual alternative: **New + → Web Service** → Docker runtime, Dockerfile pat
 
 **Check on the live URL:** `/health` → `{"status":"ok"}`; header shows green **live** dot (SSE) and **Live LLM** (or Demo Mode if no key); Run Demo → PhonePe comment tagged `llm`; Approve works after pasting the token; Attack Lab → 4 BLOCKED; Relevance Lab shows "Demo Mode scores" until you press **Re-score with Gemini**.
 
+## Frontend on Vercel + backend on Render (split deployment, optional)
+
+The Render service already serves the UI itself (same origin, nothing to configure). Use this only if you also host the UI on Vercel. Two settings must agree:
+
+| Where | Setting | Value |
+|---|---|---|
+| **Vercel** → Project → Settings → Environment Variables | `VITE_API_BASE` | the Render URL, e.g. `https://a2a-relevance-platform.onrender.com` (no trailing slash needed; no secret) |
+| **Render** → service → Environment | `CORS_ORIGINS` | the Vercel origin, e.g. `https://agent-to-agent-relevance-platform.vercel.app` (scheme + host only; comma-separate several) |
+
+* `VITE_API_BASE` is baked into the JavaScript **at build time**. After setting or changing it, redeploy on Vercel **without the build cache**, otherwise the old bundle (relative `/api` URLs on the Vercel domain) keeps running.
+* Both normal requests and the SSE stream (`/api/events`) use this base; with it unset the UI uses same-origin relative URLs (local dev proxy / Render single-service).
+* Vercel project settings: Root Directory `frontend`, Build Command `npm run build`, Output Directory `dist`.
+* Vercel preview deployments have different hostnames and are blocked by CORS unless you add each origin to `CORS_ORIGINS`.
+* Symptoms: requests to `https://<project>.vercel.app/api/...` ⇒ `VITE_API_BASE` was not present at build time; requests to Render that fail in the browser console with a CORS error ⇒ `CORS_ORIGINS` doesn't contain the exact UI origin.
+* Admin actions still need the `ADMIN_TOKEN` pasted into the sidebar field (sent as `X-Admin-Token`; stored only in that browser's localStorage).
+
 ## Known limits
 
 * **Rate limits:** free-tier Gemini keys throttle (429) and are intermittently slow; the app degrades to Demo Mode with a visible badge rather than failing. A full live Lab re-score is ~50 paced calls and may be refused/aborted — partial runs are discarded, never labelled live.
