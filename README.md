@@ -1,11 +1,9 @@
 **🚀 Live Deployment**
 
 Frontend (Live Application):
-🌐 https://agent-to-agent-relevance-platform.vercel.app
-
+https://agent-to-agent-relevance-platform.vercel.app
 Backend (API Server):
-⚙️ https://a2a-relevance-platform.onrender.com
-
+https://a2a-relevance-platform.onrender.com
 
 # Agent-to-Agent Relevance Platform
 
