@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Node / build output
+node_modules/
+dist/
+
+# Secrets (keep the template)
+.env
+.env.*
+!.env.example
+
+# Local databases
+*.db
+*.db-wal
+*.db-shm
+backend/data/
+
+# Logs / OS
+*.log
+.DS_Store
+Thumbs.db

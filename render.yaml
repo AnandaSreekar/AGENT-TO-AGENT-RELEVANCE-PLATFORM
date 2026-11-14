@@ -1,0 +1,18 @@
+# Render Blueprint (free plan): ONE Docker web service serving the API and the built React UI.
+# Free web services have no persistent disk: SQLite lives in /tmp and is re-created + re-seeded on every boot.
+services:
+  - type: web
+    name: a2a-relevance-platform
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false             # you paste it in the Render dashboard; leave empty to run in Demo Mode
+      - key: ADMIN_TOKEN
+        generateValue: true     # locks approve/reject, reset, live re-score, threshold, autonomy, feedback-simulate
+      - key: ENABLE_DEMO_CONSOLE
+        value: "true"           # needed: the UI posts as the seeded agents and Run Demo uses it (see README for the risk)
+      - key: CORS_ORIGINS
+        value: ""               # same-origin deployment, no CORS needed
